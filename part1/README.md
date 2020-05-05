@@ -39,6 +39,7 @@ Note : bf9ad06b7e80 was started earlier as a test
 
 ## 1.2 Cleanup
 All containers are stopped : 
+
 	thomas@gentoo part1 % docker container ls -a    
 	CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
 	294d2e0be3ab        nginx               "nginx -g 'daemon of…"   4 minutes ago       Exited (0) 3 minutes ago                        elastic_johnson
@@ -47,6 +48,7 @@ All containers are stopped :
 	bf9ad06b7e80        nginx               "nginx -g 'daemon of…"   7 minutes ago       Exited (0) 7 minutes ago                        trusting_joliot
 	
 Cleaning containers: 
+
 	thomas@gentoo part1 % docker rm 294d2e0be3ab 448760c858b3 8a62dd68cb7e bf9ad06b7e80
 	294d2e0be3ab
 	448760c858b3
@@ -54,10 +56,12 @@ Cleaning containers:
 	bf9ad06b7e80
 
 All the containers got deleted
+
 	thomas@gentoo part1 % docker container ls -a                                       
 	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
 Deleting all images : 
+
 	thomas@gentoo part1 % docker image rm nginx ubuntu hello-world
 	Untagged: nginx:latest
 	Untagged: nginx@sha256:282530fcb7cd19f3848c7b611043f82ae4be3781cb00105a1d593d7e6286b596
@@ -78,6 +82,7 @@ Deleting all images :
 	Deleted: sha256:af0b15c8625bb1938f1d7b17081031f649fd14e6b233688eea3c5483994a66a3
 
 All containers and images got deleted : 
+
 	thomas@gentoo part1 % docker image ls                         
 	REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 	
@@ -86,6 +91,7 @@ All containers and images got deleted :
 
 ## 1.3 Hello Docker Hub
 Start pull exercise image : 
+
 	thomas@gentoo part1 % docker run -it devopsdockeruh/pull_exercise
 	Unable to find image 'devopsdockeruh/pull_exercise:latest' locally
 	latest: Pulling from devopsdockeruh/pull_exercise
@@ -104,6 +110,7 @@ Secret message is : "This is the secret message"
 
 ## 1.4
 Start devopsdockeruh/exec_bash_exercise image : 
+
 	thomas@gentoo part1 % docker run -d  -it devopsdockeruh/exec_bash_exercise                                           
 	Unable to find image 'devopsdockeruh/exec_bash_exercise:latest' locally
 	latest: Pulling from devopsdockeruh/exec_bash_exercise
@@ -122,11 +129,13 @@ Start devopsdockeruh/exec_bash_exercise image :
 	ab950ad53dbff6e22e87bc777cd48917901e27c435362c0d0b73003e1a394417
 
 Get container ID  : 
+
 	thomas@gentoo part1 % docker container ls                                
 	CONTAINER ID        IMAGE                               COMMAND             CREATED             STATUS              PORTS               NAMES
 	2501146fbd56        devopsdockeruh/exec_bash_exercise   "node index"        12 seconds ago      Up 10 seconds                           flamboyant_wiles
 
 Access container : 
+
 	thomas@gentoo part1 % docker exec -it  2501146fbd56 bash
 	root@2501146fbd56:/usr/app# tail -f ./logs.txt
 	Tue, 14 Apr 2020 12:11:54 GMT
@@ -145,15 +154,18 @@ Access container :
 
 ## 1.5
 Start Ubuntu image
+
 	thomas@gentoo part1 % docker run -d -it ubuntu
 	c3f659f60dbb42810a53d8c59ad8e1df031003f48bdbf8168669a02e5332d34f
 
 Get container id : 
+
 	thomas@gentoo part1 % docker container ls              
 	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 	c3f659f60dbb        ubuntu              "/bin/bash"         7 seconds ago       Up 5 seconds                            charming_dijkstra
 
 Access container and run bash
+
 	thomas@gentoo part1 % docker exec -it c3f659f60dbb bash
 	root@c3f659f60dbb:/# apt-get install curl
 	Reading package lists... Done
@@ -165,6 +177,7 @@ Access container and run bash
 	root@c3f659f60dbb:/# apt-get install curl
 
 Run application : 
+
 	thomas@gentoo part1 % docker exec -it c3f659f60dbb sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
 	Input website:
 	helsinki.fi
@@ -178,6 +191,7 @@ Run application :
 	</body></html>
 
 "Smarter" solution 1 : 
+
 	thomas@gentoo part1 % docker run -it ubuntu sh -c 'apt-get update;apt-get install curl;echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'   
 	Get:1 http://archive.ubuntu.com/ubuntu bionic InRelease [242 kB]
 	Get:2 http://archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]      
@@ -247,6 +261,7 @@ Run application :
 
 "Smarter" solution 2 : 
 Search for a curl image : 
+
 thomas@gentoo part1 % docker search curl
 	NAME                             DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
 	appropriate/curl                 Alpine-based image with just curl               56                                      [OK]
@@ -276,6 +291,7 @@ thomas@gentoo part1 % docker search curl
 	robotgraves/curl-git             Alpine with cURL and GIT                        0                                       [OK]
 
 Run application : 
+
 	thomas@gentoo part1 % docker run -it appropriate/curl sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
 	Unable to find image 'appropriate/curl:latest' locally
 	latest: Pulling from appropriate/curl
@@ -297,22 +313,26 @@ Run application :
 
 ## 1.6
 First docker file : 
+
 	thomas@gentoo 1.6 % cat 1/Dockerfile 
 	FROM devopsdockeruh/overwrite_cmd_exercise
 
 Second docker file : 
+
 	thomas@gentoo 1.6 % cat 2/Dockerfile 
 	FROM devopsdockeruh/overwrite_cmd_exercise
 
 	CMD ["-c","0"]
 
 Run docker clock : 
+
 	thomas@gentoo 2 % docker run docker-clock       
 	1
 	2
 
 ## 1.7
 Docker file :
+
 	thomas@gentoo 1.7 % cat Dockerfile 
 	FROM ubuntu:16.04 
 	
@@ -323,6 +343,7 @@ Docker file :
 	CMD ["/mydir/curl.sh"]
 
 Build image : 
+
 	thomas@gentoo 1.7 % docker build -t curler .
 	Sending build context to Docker daemon  3.072kB
 	Step 1/6 : FROM ubuntu:16.04
@@ -347,6 +368,7 @@ Build image :
 	Successfully tagged curler:latest
 
 Run container : 
+
 	thomas@gentoo 1.7 % docker run -i curler    
 	Input website:
 	helsinki.fi
@@ -364,10 +386,12 @@ Run container :
 
 ## 1.8
 Start the container with bind mount so that the logs are created into your filesystem : 
+
 	thomas@gentoo 1.8 % touch $(pwd)/logs.txt
 	thomas@gentoo 1.8 % docker run -v $(pwd)/logs.txt:/usr/app/logs.txt -i devopsdockeruh/first_volume_exercise
 
 ## 1.9
+
 	thomas@gentoo part1 % docker run -p 80:80 devopsdockeruh/ports_exercise                                      
 	Unable to find image 'devopsdockeruh/ports_exercise:latest' locally
 	latest: Pulling from devopsdockeruh/ports_exercise
@@ -386,6 +410,7 @@ Start the container with bind mount so that the logs are created into your files
 
 ## 1.10
 Get code from github : 
+
 	thomas@gentoo 1.10 % git clone https://github.com/docker-hy/frontend-example-docker
 	Clonage dans 'frontend-example-docker'...
 	remote: Enumerating objects: 8, done.
@@ -398,6 +423,7 @@ Get code from github :
 Note : i chose to download the code outside of the container in order to have a versioned image
 
 Build image
+
 	thomas@gentoo 1.10 % docker build -t frontend-example-docker .
 	Sending build context to Docker daemon  1.817MB
 	Step 1/11 : FROM ubuntu:16.04
@@ -536,6 +562,7 @@ Build image
 	Successfully tagged frontend-example-docker:latest
 
 Run container : 
+
 	thomas@gentoo 1.10 % docker run -it -p 5000:5000 frontend-example-docker
 	
 	> frontend-example-docker@1.0.0 start /mydir
@@ -651,6 +678,7 @@ Run container :
 
 ## 1.12
 Download code from github : 
+
 	thomas@gentoo 1.11 % git clone https://github.com/docker-hy/backend-example-docker
 	Clonage dans 'backend-example-docker'...
 	remote: Enumerating objects: 7, done.
@@ -661,6 +689,7 @@ Download code from github :
 	Résolution des deltas: 100% (33/33), fait.
 
 Build image : 
+
 	thomas@gentoo 1.11 % docker build -t backend-example-docker .
 	Sending build context to Docker daemon  372.2kB
 	Step 1/11 : FROM ubuntu:16.04
@@ -776,6 +805,7 @@ Build image :
 	Successfully tagged backend-example-docker:latest
 
 Start container:
+
 	thomas@gentoo 1.11 % docker run -it -p 8000:8000 -v $(pwd)/logs.txt:/mydir/logs.txt backend-example-docker
 	
 	> backend-example-docker@1.0.0 start /mydir
@@ -785,23 +815,28 @@ Start container:
 	Started on port 8000
 
 Check log file after one http request : 
+
 	thomas@gentoo ~ % cat tmp/devopswithdocker/part1/1.11/logs.txt
 	5/4/2020, 7:43:40 PM: Connection received in root
 
 Get container ID
+
 	thomas@gentoo ~ % docker ps
 	CONTAINER ID        IMAGE                               COMMAND                CREATED             STATUS              PORTS                    NAMES
 	9e89725b2894        backend-example-docker              "/usr/bin/npm start"   2 minutes ago       Up 2 minutes        0.0.0.0:8000->8000/tcp   xenodochial_shamir
 
 Stop container :
+	
 	thomas@gentoo ~ % docker stop 9e89725b2894
 	9e89725b2894
 
 Start container : 
+
 	thomas@gentoo ~ % docker start 9e89725b2894
 	9e89725b2894
 
 Check log after second http requests : 
+
 	thomas@gentoo ~ % cat tmp/devopswithdocker/part1/1.11/logs.txt
 	5/4/2020, 7:43:40 PM: Connection received in root
 	5/4/2020, 7:45:18 PM: Connection received in root
