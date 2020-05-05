@@ -262,7 +262,7 @@ Run application :
 "Smarter" solution 2 : 
 Search for a curl image : 
 
-thomas@gentoo part1 % docker search curl
+	thomas@gentoo part1 % docker search curl
 	NAME                             DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
 	appropriate/curl                 Alpine-based image with just curl               56                                      [OK]
 	tutum/curl                       Base ubuntu image with curl preinstalled        23                                      [OK]
