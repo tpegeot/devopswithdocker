@@ -841,4 +841,346 @@ Check log after second http requests :
 	5/4/2020, 7:43:40 PM: Connection received in root
 	5/4/2020, 7:45:18 PM: Connection received in root
 
+## 1.12
+
+Copy source code from project 1.10 and 1.11 : 
+
+	thomas@gentoo part1 % cp -pr 1.10/frontend-example-docker 1.12
+	thomas@gentoo part1 % cp -pr 1.11/backend-example-docker 1.12
+	
+Copy dockerfiles from project 1.10 and 1.11 : 
+
+	thomas@gentoo part1 % cp 1.11/Dockerfile 1.12/Dockerfile-backend
+	thomas@gentoo part1 % cp 1.10/Dockerfile 1.12/Dockerfile-frontend
+
+Build the frontend image from a Dockerfile : 
+
+	thomas@gentoo 1.12 % docker build -t frontend-example-docker-1.12 -f Dockerfile-frontend .
+	Sending build context to Docker daemon  780.3kB
+	Step 1/12 : FROM ubuntu:16.04
+	 ---> 77be327e4b63
+	Step 2/12 : ENV API_URL=http://localhost:8000
+	 ---> Running in 6e467b3eba30
+	Removing intermediate container 6e467b3eba30
+	 ---> 27dca5eb05b0
+	Step 3/12 : WORKDIR /mydir
+	 ---> Running in e95ed06a0868
+	Removing intermediate container e95ed06a0868
+	 ---> 3b6e1185f687
+	Step 4/12 : COPY frontend-example-docker/ .
+	 ---> aafe255f7ddb
+	Step 5/12 : RUN apt-get update && apt-get install -y curl
+	 ---> Running in bdc8d1eb03ab
+	 ...
+	Removing intermediate container bdc8d1eb03ab
+	 ---> fcd33e7e763c
+	Step 6/12 : RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+	 ---> Running in 09d357d23b4f
+	 ...
+	Removing intermediate container 09d357d23b4f
+	 ---> baa985a36bbe
+	Step 7/12 : RUN apt install -y nodejs
+	 ---> Running in a7a2acf0a50c
+	 ...
+	Removing intermediate container a7a2acf0a50c
+	 ---> ad930eaba000
+	Step 8/12 : RUN node -v
+	 ---> Running in 55a4d9be4fd4
+	v10.20.1
+	Removing intermediate container 55a4d9be4fd4
+	 ---> 22d834a31cbc
+	Step 9/12 : RUN npm -v
+	 ---> Running in 1b091e1e63af
+	6.14.4
+	Removing intermediate container 1b091e1e63af
+	 ---> aecb5bf64b8a
+	Step 10/12 : RUN npm install
+	 ---> Running in 94ac8080525b
+	...
+	Removing intermediate container 94ac8080525b
+	 ---> ec88c91843f2
+	Step 11/12 : EXPOSE 5000
+	 ---> Running in 6eab57c15592
+	Removing intermediate container 6eab57c15592
+	 ---> b95d8d21b820
+	Step 12/12 : CMD ["/usr/bin/npm","start"]
+	 ---> Running in 391643011a1e
+	Removing intermediate container 391643011a1e
+	 ---> 6c4dc45179bf
+	Successfully built 6c4dc45179bf
+	Successfully tagged frontend-example-docker-1.12:latest
+
+Build the backend image from a Dockerfile : 
+
+	thomas@gentoo 1.12 % docker build -t backend-example-docker-1.12 -f Dockerfile-backend .
+	Sending build context to Docker daemon  780.3kB
+	Step 1/12 : FROM ubuntu:16.04
+	 ---> 77be327e4b63
+	Step 2/12 : ENV FRONT_URL=http://localhost:5000
+	 ---> Running in 94f46d78b1bf
+	Removing intermediate container 94f46d78b1bf
+	 ---> 095371c2a1aa
+	Step 3/12 : WORKDIR /mydir
+	 ---> Running in 39eb0f1acc59
+	Removing intermediate container 39eb0f1acc59
+	 ---> 0146bd5cd864
+	Step 4/12 : COPY backend-example-docker/ .
+	 ---> eabe9176573e
+	Step 5/12 : RUN apt-get update && apt-get install -y curl
+	 ---> Running in 2935a9e2f00d
+	...
+	Removing intermediate container 2935a9e2f00d
+	 ---> e2551bd612bc
+	Step 6/12 : RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+	 ---> Running in 321ee431f110
+	...
+	Removing intermediate container 321ee431f110
+	 ---> 346a8f118fcb
+	Step 7/12 : RUN apt install -y nodejs
+	 ---> Running in ee2273a95ced
+	...
+	Removing intermediate container ee2273a95ced
+	 ---> 084a105eb25f
+	Step 8/12 : RUN node -v
+	 ---> Running in cb6d3535e0ef
+	v10.20.1
+	Removing intermediate container cb6d3535e0ef
+	 ---> e949b1fe9fcb
+	Step 9/12 : RUN npm -v
+	 ---> Running in 91bd839f187c
+	6.14.4
+	Removing intermediate container 91bd839f187c
+	 ---> 3919e344249e
+	Step 10/12 : RUN npm install
+	 ---> Running in 3bf1686a37e9
+	...
+	Removing intermediate container 3bf1686a37e9
+	 ---> ba6fb585a8aa
+	Step 11/12 : EXPOSE 8000
+	 ---> Running in 35a56ea80697
+	Removing intermediate container 35a56ea80697
+	 ---> c83c30364f46
+	Step 12/12 : CMD ["/usr/bin/npm","start"]
+	 ---> Running in 1e68a1bd0762
+	Removing intermediate container 1e68a1bd0762
+	 ---> b951cb2d4a7c
+	Successfully built b951cb2d4a7c
+	Successfully tagged backend-example-docker-1.12:latest
+
+Run frontend container : 
+
+	thomas@gentoo 1.12 % docker run -it -p 5000:5000 -d frontend-example-docker-1.12
+	205bc1b36916782470b524c384a29152a6eb753a88b9756a203fe0501fe8ca03
+
+Create empty log file for backend container : 
+	
+	thomas@gentoo 1.12 % touch logs.txt
+
+Run backend container
+
+	thomas@gentoo 1.12 % docker run -it -p 8000:8000 -v $(pwd)/logs.txt:/mydir/logs.txt -d backend-example-docker-1.12
+	452692f28bfaf2f791ff48818bc5cb03d13296e5e395d269900689fd6f96bbf3
+
+# 1.13
+
+Build image : 
+
+	thomas@gentoo 1.13 % docker build -t spring-example-project .
+	Sending build context to Docker daemon  110.6kB
+	Step 1/6 : FROM openjdk:8
+	8: Pulling from library/openjdk
+	90fe46dd8199: Pull complete
+	35a4f1977689: Pull complete
+	bbc37f14aded: Pull complete
+	74e27dc593d4: Pull complete
+	93a01fbfad7f: Pull complete
+	1478df405869: Pull complete
+	64f0dd11682b: Pull complete
+	Digest: sha256:bedfb494645a0f9c48d333544986d5301df950e31f71e8861b5ba1601aedc587
+	Status: Downloaded newer image for openjdk:8
+	 ---> 6cedfea72886
+	Step 2/6 : WORKDIR /mydir
+	 ---> Running in 9e21eb507042
+	Removing intermediate container 9e21eb507042
+	 ---> 3e03f99bc179
+	Step 3/6 : COPY spring-example-project/ .
+	 ---> 78ef94d51b2d
+	Step 4/6 : RUN /bin/sh mvnw package
+	 ---> Running in e24bd176b80b
+	 ...
+	[INFO] Replacing main artifact with repackaged archive
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD SUCCESS
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Total time:  26.821 s
+	[INFO] Finished at: 2020-05-05T20:37:55Z
+	[INFO] ------------------------------------------------------------------------
+	Removing intermediate container e24bd176b80b
+	 ---> 14de99441d93
+	Step 5/6 : EXPOSE 8000
+	 ---> Running in 85e8b41d65e2
+	Removing intermediate container 85e8b41d65e2
+	 ---> d1b59b912bc0
+	Step 6/6 : CMD ["java","-jar","./target/docker-example-1.1.3.jar"]
+	 ---> Running in 82c7c4ac1d58
+	Removing intermediate container 82c7c4ac1d58
+	 ---> 053967025de9
+	Successfully built 053967025de9
+	Successfully tagged spring-example-project:latest
+
+
+Run container : 
+
+	thomas@gentoo 1.13 % docker run -it -p 8080:8080 -d spring-example-project
+	ab0140a6fc3f4a08b09ebbaadd8aa541fb2a5dcbe00aa046e6f13010244949e9
+
+## 1.14
+
+Build image : 
+
+	thomas@gentoo 1.14 % docker build -t rails-example-project .
+	Sending build context to Docker daemon  240.6kB
+	Step 1/14 : FROM ruby:2.6.0
+	 ---> ef8778f370d5
+	Step 2/14 : WORKDIR /mydir
+	 ---> Using cache
+	 ---> 0049766f4db6
+	Step 3/14 : COPY rails-example-project .
+	 ---> Using cache
+	 ---> 111a5f821254
+	Step 4/14 : RUN apt-get update && apt-get install -y curl
+	 ---> Using cache
+	 ---> 54fb7d4ce0b6
+	Step 5/14 : RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+	 ---> Using cache
+	 ---> 441b4bb19e40
+	Step 6/14 : RUN apt install -y nodejs
+	 ---> Using cache
+	 ---> ef31cbde5263
+	Step 7/14 : RUN gem install bundler
+	 ---> Using cache
+	 ---> b805c4e88455
+	Step 8/14 : RUN bundle install
+	 ---> Using cache
+	 ---> a5935768edc1
+	Step 9/14 : ENV RAILS_ENV=production
+	 ---> Using cache
+	 ---> fe5dea2427ff
+	Step 10/14 : ENV SECRET_KEY_BASE 0d5vXr5c7R8YfyyE+Dw9+z8QiqS6npdHk2I96ge0Cq0JYdHYxNqddIzChcIraLs//Dsd3daYGGwX3yie5bSl0IWivCWQ2J7dSrQKw6DJYbrTMPfeCbwJT6LXug5lvd2wyQkKz9CEldjZEuoey/thQug7qkXvHoX8Udl9TKFjapvFpNz2vYUJ6b6xBV/v2jayvMoOuf17gRdItXR2c/q7wRaWLjuCu9OAReMDWNxNeY/UFOhZPIZQKjUMEUpzX5FYFV/IuM2DdqPy/vv9V4wF4lLfXi7OTBzOiC+9LWrRIZ9GxUnC6VvXqK0KcDnQBkCurmizSBVRbeebxlMuZx9db1Q5Yw8Cagj+wOoXgp4rQsTItcOJQ615A8tVpuoXyvoGAc+JMHzzbKkDsik02gh1PoD+nEOBFWxtHXpt--zqE6wZaIOMNAUukB--8fNV5cbeq2eZVMKCRBQEqg==
+	 ---> Running in 4f48e56deb68
+	Removing intermediate container 4f48e56deb68
+	 ---> e7c192b63d92
+	Step 11/14 : RUN bin/rails db:migrate
+	 ---> Running in 68b4f82cd125
+	== 20190314120316 CreatePresses: migrating ====================================
+	-- create_table(:presses)
+	   -> 0.0005s
+	== 20190314120316 CreatePresses: migrated (0.0005s) ===========================
+	
+	Removing intermediate container 68b4f82cd125
+	 ---> e00a0393595a
+	Step 12/14 : RUN bin/rake assets:precompile
+	 ---> Running in d0318565fe55
+	 ...
+	Removing intermediate container d0318565fe55
+	 ---> 86cdb3aed525
+	Step 13/14 : EXPOSE 3000
+	 ---> Running in 846a6bc3baf0
+	Removing intermediate container 846a6bc3baf0
+	 ---> fa5925972037
+	Step 14/14 : CMD ["bin/rails","s","-e","production"]
+	 ---> Running in 2d768571d0e9
+	Removing intermediate container 2d768571d0e9
+	 ---> 3b84793a06d9
+	Successfully built 3b84793a06d9
+	Successfully tagged rails-example-project:latest
+
+Run container : 
+
+	thomas@gentoo 1.14 % docker run -it -p 3000:3000 rails-example-project
+	=> Booting Puma
+	=> Rails 5.2.2.1 application starting in production
+	=> Run `rails server -h` for more startup options
+	Puma starting in single mode...
+	* Version 3.12.0 (ruby 2.6.0-p0), codename: Llamas in Pajamas
+	* Min threads: 5, max threads: 5
+	* Environment: production
+	* Listening on tcp://0.0.0.0:3000
+	Use Ctrl-C to stop
+	^C- Gracefully stopping, waiting for requests to finish
+	=== puma shutdown: 2020-05-05 21:45:16 +0000 ===
+	- Goodbye!
+	Exiting
+
+## 1.15
+Use French application to generate covid19 certificate.
+
+Clone source code from github : 
+
+	thomas@gentoo 1.15 % git clone https://github.com/lab-mi/deplacement-covid-19.git
+	Clonage dans 'deplacement-covid-19'...
+	remote: Enumerating objects: 30, done.
+	remote: Counting objects: 100% (30/30), done.
+	remote: Compressing objects: 100% (26/26), done.
+	remote: Total 165 (delta 13), reused 13 (delta 4), pack-reused 135
+	Réception d'objets: 100% (165/165), 789.05 Kio | 1.58 Mio/s, fait.
+	Résolution des deltas: 100% (66/66), fait.
+
+
+Build image from node base image : 
+
+	thomas@gentoo 1.15 % docker build -t deplacement-covid-19 .
+	Sending build context to Docker daemon  1.797MB
+	Step 1/8 : FROM node
+	 ---> a511eb5c14ec
+	Step 2/8 : WORKDIR /mydir
+	 ---> Using cache
+	 ---> ba1f7984805f
+	Step 3/8 : COPY deplacement-covid-19 .
+	 ---> Using cache
+	 ---> b20354c3a268
+	Step 4/8 : RUN /usr/local/bin/node -v
+	 ---> Running in 5208d5aab4ef
+	v14.1.0
+	Removing intermediate container 5208d5aab4ef
+	 ---> ae1f3e4b9b9b
+	Step 5/8 : RUN /usr/local/bin/npm -v
+	 ---> Running in b7a140211b05
+	6.14.4
+	Removing intermediate container b7a140211b05
+	 ---> d6148659ae74
+	Step 6/8 : RUN /usr/local/bin/npm install
+	 ---> Running in 51b4695bf1c4
+	 ...
+	Removing intermediate container 51b4695bf1c4
+	 ---> 01043812e22e
+	Step 7/8 : EXPOSE 1234
+	 ---> Running in d1d7c26a1606
+	Removing intermediate container d1d7c26a1606
+	 ---> 802baaf4e164
+	Step 8/8 : CMD ["/usr/local/bin/npm","start"]
+	 ---> Running in 745a63b20a7b
+	Removing intermediate container 745a63b20a7b
+	 ---> ab54326a3045
+	Successfully built ab54326a3045
+	Successfully tagged deplacement-covid-19:latest
+
+Run container
+
+	thomas@gentoo 1.15 % docker run -it -p 1234:1234 deplacement-covid-19
+	
+	> deplacement-covid-19@0.0.1 start /mydir
+	> cross-env VERSION=${VERSION:-localversion} parcel --public-url ${PUBLIC_URL:-/deplacement-covid-19} ./src/index.html
+	
+	Server running at http://localhost:1234
+	⚠️  Please specify a publicURL using --public-url, otherwise schema assets won't be collected
+	⚠️  Please specify a publicURL using --public-url, otherwise schema assets won't be collected
+	✨  Built in 7.41s.
+	👷 parcel-plugin-sw-cache: sw-cache: Service worker generation completed.
+
+Note : no point of uploading it to Docker Hub
+
+## 1.16
+
+
 

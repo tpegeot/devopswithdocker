@@ -1,1 +1,10 @@
 *.mp4
+part1/1.10/frontend-example-docker/
+part1/1.11/backend-example-docker/
+part1/1.12/backend-example-docker/
+part1/1.12/frontend-example-docker/
+part1/1.12/logs.txt
+part1/1.13/spring-example-project/
+part1/1.14/rails-example-project/
+part1/1.15/deplacement-covid-19/
+
