@@ -1182,5 +1182,10 @@ Note : no point of uploading it to Docker Hub
 
 ## 1.16
 
+Skipped
+
+## 1.17
+
+As I'm not a full time developper, I skipped that one too.
 
 
