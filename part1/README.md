@@ -676,7 +676,9 @@ Run container :
 	   │                                                │
 	   └────────────────────────────────────────────────┘
 
-## 1.12
+![1.10](https://github.com/tpegeot/devopswithdocker/raw/master/part1/1.10/Screenshot_20200504_212510.png "1.10")
+
+## 1.11
 Download code from github : 
 
 	thomas@gentoo 1.11 % git clone https://github.com/docker-hy/backend-example-docker
@@ -841,6 +843,8 @@ Check log after second http requests :
 	5/4/2020, 7:43:40 PM: Connection received in root
 	5/4/2020, 7:45:18 PM: Connection received in root
 
+![1.11](https://github.com/tpegeot/devopswithdocker/raw/master/part1/1.11/Screenshot_20200504_214404.png "1.11")
+
 ## 1.12
 
 Copy source code from project 1.10 and 1.11 : 
@@ -980,6 +984,12 @@ Run backend container
 
 	thomas@gentoo 1.12 % docker run -it -p 8000:8000 -v $(pwd)/logs.txt:/mydir/logs.txt -d backend-example-docker-1.12
 	452692f28bfaf2f791ff48818bc5cb03d13296e5e395d269900689fd6f96bbf3
+
+![1.12](https://github.com/tpegeot/devopswithdocker/raw/master/part1/1.12/Screenshot_20200505_214744.png "2.12")
+
+![1.12](https://github.com/tpegeot/devopswithdocker/raw/master/part1/1.12/Screenshot_20200505_214802.png "1.12")
+
+![1.12](https://github.com/tpegeot/devopswithdocker/raw/master/part1/1.12/Screenshot_20200506_150936.png "1.12")
 
 # 1.13
 

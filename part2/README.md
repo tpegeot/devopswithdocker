@@ -385,6 +385,10 @@ Scale up to two compute node :
 
 => success
 
+
+![2.4](https://github.com/tpegeot/devopswithdocker/raw/master/part2/2.4/Screenshot_20200506_223353.png "2.4")
+
+
 ## 2.5
 
 Add redis  :
@@ -553,6 +557,10 @@ Nginx configuration :
 	  }
 
 / is really important afer backend:8000! 
+
+Screenshot : 
+
+![2.8](https://github.com/tpegeot/devopswithdocker/raw/master/part2/2.8/Screenshot_20200514_115454.png "2.8")
 
 ## 2.9
 
