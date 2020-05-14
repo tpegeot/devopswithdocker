@@ -604,3 +604,7 @@ I had to set API_URL and FRONT_URL in docker-compose.yml :
 	       depends_on: 
 	         - redis
 	         - db
+
+Screenshot : 
+
+![2.10](https://github.com/tpegeot/devopswithdocker/raw/master/part2/2.10/Screenshot_20200514_142740.png "2.10")
